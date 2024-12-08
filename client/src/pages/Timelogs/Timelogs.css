@@ -1,0 +1,31 @@
+.time-logs-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #8e4d1f;
+  border-radius: 5px;
+  color: #fff;
+  margin-top: 4rem;
+}
+
+.time-logs-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  margin-top: 20px;
+}
+
+.time-logs-table th,
+.time-logs-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #fff;
+}
+
+.time-logs-table th {
+  background-color: #6b2f04;
+  font-weight: bold;
+}
+
+.time-logs-table tr:hover {
+  background-color: #c2611c;
+}  
