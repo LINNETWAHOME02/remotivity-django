@@ -40,8 +40,12 @@ export const AuthProvider = ({children}) => {
 
     // Register the user when their details are validated
     const register = async (username, email, password) => {
-        const response = await register_user(username, email, password)
-        return response
+        const success = await register_user(username, email, password)
+        if (success){
+            setIsAuthenticated(true)
+            navigate('/tasks')
+        }
+        return success
     }
 
     // Create a task

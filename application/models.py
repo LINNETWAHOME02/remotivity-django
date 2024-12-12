@@ -1,9 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Test(models.Model):
-    name = models.CharField(max_length=100)
-
 class Task(models.Model):
     objects = None
     name = models.CharField(max_length=20)

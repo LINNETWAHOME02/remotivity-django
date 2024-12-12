@@ -21,7 +21,7 @@ function SignUp() {
     e.preventDefault();
     try {
       // Send formData object in the request
-      const response = register(username, email, password)
+      const response = await register(username, email, password)
 
       // Save the newUser data to localStorage
       const newUser = response.data.user;
@@ -30,7 +30,6 @@ function SignUp() {
         localStorage.setItem('dataUser', JSON.stringify(newUser));
         localStorage.setItem('token', JSON.stringify(token));
       }
-
       // Navigate to tasks page
       navigate('/tasks');
     } catch (error) {

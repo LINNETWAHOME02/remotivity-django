@@ -151,12 +151,17 @@ export const is_authenticated = async () => {
 // Create a new user
 export const register_user = async (username, email, password) => {
     try{
+        const accessToken = await JSON.parse(localStorage.getItem('token'));
         const response = await axios.post(REGISTER_URL,
             {username: username,
                 email: email,
                 password: password},
-            {withCredentials: true})
-        return response.data
+            {withCredentials: true,
+                headers: {
+                    'Authorization': `Token ${accessToken}`
+                }
+            })
+        return response
     } catch (error){
         return error
     }
