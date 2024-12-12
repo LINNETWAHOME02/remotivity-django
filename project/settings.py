@@ -35,25 +35,32 @@ DEBUG = True
 # Allow any different host to host this django application
 ALLOWED_HOSTS = ['*']
 
-# Configuration for rest framework to work with our JWT tokens
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        # Call the cookie authentication class created in application/authentication.py file
-        'application.authentication.CookiesJWTAuthentication',
-    ),
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
-    ],
-}
+# # Configuration for rest framework to work with our JWT tokens
+# REST_FRAMEWORK = {
+#     "DEFAULT_AUTHENTICATION_CLASSES": (
+#         # Call the cookie authentication class created in application/authentication.py file
+#         'application.authentication.CookiesJWTAuthentication',
+#         'rest_framework.authentication.TokenAuthentication',
+#         'rest_framework.authentication.SessionAuthentication',
+#         'rest_framework.authentication.BasicAuthentication',  # enables simple command line authentication
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     ),
+#     "DEFAULT_PERMISSION_CLASSES": [
+#         "rest_framework.permissions.IsAuthenticated",
+#     ],
+# }
 
-# Specifying the lifetime for our JWT tokens
-SIMPLE_JWT = {
-    # Current token that identifies the user and allows them to access diff routes
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
-    # If the access token expires, the refresh token will be used to generate a new access token
-    # Therefore it has a larger expiration period
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-}
+# # Specifying the lifetime for our JWT tokens
+# SIMPLE_JWT = {
+#     # Current token that identifies the user and allows them to access diff routes
+#     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+#     # If the access token expires, the refresh token will be used to generate a new access token
+#     # Therefore it has a larger expiration period
+#     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+#     # Use JWT
+#     'AUTH_HEADER_TYPES': ('JWT', 'Bearer', 'Token'),
+#      # 'AUTH_HEADER_TYPES': ('Bearer',),
+# }
 
 # Application definition
 
@@ -67,7 +74,8 @@ INSTALLED_APPS = [
     'application',
     'rest_framework',
     'corsheaders',
-    'rest_framework_simplejwt',
+    # 'rest_framework_simplejwt',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -82,7 +90,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173'
+    'http://localhost:5173',
+    'http://localhost:5174'
 ]
 CORS_ALLOW_CREDENTIALS = True
 
@@ -111,13 +120,17 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'remotivity',
+    #     'USER': 'root',
+    #     'PASSWORD': '',
+    #     'HOST': 'localhost',
+    #     'PORT': '3306',
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'remotivity',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -161,9 +174,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'client/build/static'),
 ]
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-]
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

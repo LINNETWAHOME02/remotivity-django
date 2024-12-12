@@ -13,7 +13,7 @@ function Navbar() {
     const isConfirmed = window.confirm("Are you sure you want to log out?");
     if (isConfirmed) {
       try {
-        const response = logout()
+        const response = await logout()
         console.log("Logged out:", response);
 
         // Clear the user data from localStorage

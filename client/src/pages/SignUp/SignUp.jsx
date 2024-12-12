@@ -24,9 +24,11 @@ function SignUp() {
       const response = register(username, email, password)
 
       // Save the newUser data to localStorage
-      const newUser = response.data;
+      const newUser = response.data.user;
+      const token = response.data.token;
       if (newUser) {
         localStorage.setItem('dataUser', JSON.stringify(newUser));
+        localStorage.setItem('token', JSON.stringify(token));
       }
 
       // Navigate to tasks page

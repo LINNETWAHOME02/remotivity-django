@@ -2,15 +2,69 @@ import axios from 'axios'
 
 // Get the urls for all the apis we are calling from the backend
 const BASE_URL = 'http://127.0.0.1:8000/api/'
-const LOGIN_URL = `${BASE_URL}token/`
+const LOGIN_URL = `${BASE_URL}signin/`
 const TASKS_URLS = `${BASE_URL}getTasks/` // Get tasks
 const REFRESH_URL = `${BASE_URL}token/refresh/`
 const LOGOUT_URL = `${BASE_URL}logout/`
 const AUTH_URL = `${BASE_URL}is_authenticated/`
-const REGISTER_URL = `${BASE_URL}register_user/`
+const REGISTER_URL = `${BASE_URL}signup/`
 const CREATE_TASK_URL = `${BASE_URL}create_tasks/`
 
-// Create apis
+// Delete a task
+export const deleteTask = async (taskId) => {
+    try {
+        const accessToken = await JSON.parse(localStorage.getItem('token'));
+        const response = await axios.delete(`${TASKS_URLS}${taskId}/delete/`,
+            {withCredentials: true,
+                headers: {
+                'Authorization': `Token ${accessToken}`
+            }});
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting task:', error.response.data);
+        throw error;
+    }
+};
+
+// Edit the task
+export const editTask = async (taskId, taskData) => {
+    try {
+        const accessToken = JSON.parse(localStorage.getItem('token'));
+        const response = await axios.put(
+            `${TASKS_URLS}${taskId}/update/`,
+            taskData, // Pass the actual task data to update
+            {
+                withCredentials: true,
+                headers: {
+                    'Authorization': `Token ${accessToken}`,
+                    'Content-Type': 'application/json', // Ensure content type is JSON
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error editing task:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// Get specific task to be updated
+export const getTaskById = async (taskId) => {
+    try {
+        const accessToken = JSON.parse(localStorage.getItem('token'));
+        const response = await axios.get(`${TASKS_URLS}${taskId}/`, {
+            withCredentials: true,
+            headers: {
+                'Authorization': `Token ${accessToken}`,
+            },
+        });
+        return response;
+    } catch (error) {
+        console.error('Error fetching task:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
 export const login = async (username, password) => {
         const response = await axios.post(
         LOGIN_URL,
@@ -19,7 +73,7 @@ export const login = async (username, password) => {
         // Send with credentials, cookies, as well
         {withCredentials: true}
         )
-        return response.data.success
+        return response
 
 }
 
@@ -39,9 +93,15 @@ export const refresh_token = async () => {
 
 export const get_task = async () => {
     try{
-        const response = await axios.get(TASKS_URLS, {withCredentials: true})
+        const accessToken = await JSON.parse(localStorage.getItem('token'));
+        const response = await axios.get(TASKS_URLS,
+            {withCredentials: true,
+                headers: {
+                'Authorization': `Token ${accessToken}`
+            }}
+            )
 
-        return response.data.success
+        return response
     } catch (error){
         return call_refresh(error, axios.get(TASKS_URLS, {withCredentials: true}))
     }
@@ -76,8 +136,14 @@ export const logout = async () => {
 
 export const is_authenticated = async () => {
     try{
-        return await axios.post(AUTH_URL, {}, {withCredentials: true})
+        const accessToken = await JSON.parse(localStorage.getItem('token'));
+        return await axios.post(AUTH_URL, {},
+            {withCredentials: true,
+                headers: {
+                    'Authorization': `Token ${accessToken}`
+                }})
     } catch(error){
+        console.log(error)
         return error
     }
 }
@@ -99,13 +165,17 @@ export const register_user = async (username, email, password) => {
 // Create a new task
 export const create_task = async (name, description, start_time, end_time) => {
     try{
+        const accessToken = await JSON.parse(localStorage.getItem('token'));
         const response = await axios.post(CREATE_TASK_URL,
             {name: name,
                 description: description,
                 start_time: start_time,
                 end_time: end_time
                 },
-            {withCredentials: true})
+            {withCredentials: true,
+            headers: {
+                'Authorization': `Token ${accessToken}`
+            }})
         return response.data
     } catch (error){
         return error

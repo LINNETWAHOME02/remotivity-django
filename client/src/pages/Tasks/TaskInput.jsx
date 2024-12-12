@@ -36,9 +36,9 @@ const TaskInput = () => {
       setIsLoading(true);
 
       // It sends the task details to the server using axios.post
-      const response = createTask(name, description, start_time, end_time);
+      const response = await createTask(name, description, start_time, end_time);
 
-      console.log(response.data);
+      console.log(response);
       setSuccessMessage("Task created successfully!");
       // Clear the form fields
       setName("");

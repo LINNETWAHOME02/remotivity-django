@@ -12,6 +12,7 @@ import TaskInput from "./pages/Tasks/TaskInput";
 
 import {AuthProvider} from "./contexts/useAuth.jsx";
 import {PrivateRoute} from "./components/private_routes.jsx";
+import EditTask from "./pages/EditTask.jsx";
 
 function App() {
   const [timelogData, setTimelogData] = useState([]);
@@ -41,6 +42,7 @@ function App() {
                 <Route path="/charts" element={
                   <PrivateRoute><ChartsPage timelogData={timelogData}/></PrivateRoute>
                 }/>
+                <Route path="/tasks/edit/:taskId" element={<EditTask />} />
                 <Route path="/sign-up" element={<SignUp/>}/>
                 <Route path="/log-in" element={<LogIn/>}/>
               </Routes>

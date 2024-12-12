@@ -23,11 +23,13 @@ function LogIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = login_user(username, password)
+      const response = await login_user(username, password)
 
-      const newUser = response.data;
+      const newUser = response.data.user;
+      const token = response.data.token;
       if (newUser) {
         localStorage.setItem('dataUser', JSON.stringify(newUser));
+        localStorage.setItem('token', JSON.stringify(token));
       }
 
       // Navigate to tasks page

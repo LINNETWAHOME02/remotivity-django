@@ -1,9 +1,9 @@
 // Only allow authenticated user to create tasks, view time logs and charts
 import {createContext, useContext, useEffect, useState} from "react";
-import {is_authenticated, login, register_user, create_task} from "../endpoints/api.js";
+import {is_authenticated, login, register_user, create_task, get_task} from "../endpoints/api.js";
 import {useNavigate} from "react-router-dom";
 
-const AuthContext = createContext()
+const AuthContext = createContext();
 
 // To be used to wrap the whole App so we can use our useAuth
 // eslint-disable-next-line react/prop-types
@@ -19,7 +19,7 @@ export const AuthProvider = ({children}) => {
         try{
             // Call the api
             const success = await is_authenticated()
-            setIsAuthenticated(success)
+            setIsAuthenticated(success.data)
         } catch{
             setIsAuthenticated(false)
         } finally {
@@ -35,20 +35,31 @@ export const AuthProvider = ({children}) => {
             setIsAuthenticated(true)
             navigate('/tasks')
         }
+        return success
     }
 
     // Register the user when their details are validated
     const register = async (username, email, password) => {
         const response = await register_user(username, email, password)
-        return response.data
+        return response
     }
 
     // Create a task
     const createTask = async (name, description, start_time, end_time) => {
         try{
             const response = await create_task(name, description, start_time, end_time)
-            return response.data
+            return response
         } catch (error) {
+            return error
+        }
+    }
+
+    // Get tasks
+    const getAllTasks = async () => {
+        try{
+            const response = await get_task()
+            return response
+        } catch (error){
             return error
         }
     }
@@ -59,7 +70,7 @@ export const AuthProvider = ({children}) => {
     }, []);
     return(
         // Pass the values w to be used in the components/private_route.js
-        <AuthContext.Provider value={{isAuthenticated, isLoading, login_user, register, createTask}}>
+        <AuthContext.Provider value={{isAuthenticated, isLoading,  login_user, register, createTask, getAllTasks}}>
             {children}
         </AuthContext.Provider>
     )

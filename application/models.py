@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class Test(models.Model):
+    name = models.CharField(max_length=100)
+
 class Task(models.Model):
     objects = None
     name = models.CharField(max_length=20)
@@ -9,7 +12,7 @@ class Task(models.Model):
     # Every task is associated to a user, if user is deleted so is the task
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='task')
 
-    start_time = models.DateTimeField()
+    start_time = models.DateTimeField(null=False)
     end_time = models.DateTimeField()
 
     # A model has to have a constructor
